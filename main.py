@@ -94,7 +94,7 @@ class StudentList(tk.Frame):
 
         # FIXME: want every time press draw names to add one more line to the names list
         # FIXME: eventually want names being drawn to be shown where Joe John Mary is
-        
+
         drawnames()
 
 
