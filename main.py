@@ -17,7 +17,11 @@ class StudentList(tk.Frame):
         classlist = open(filename, mode='r+')
         classname = filename[:len(filename) - 4]
         print(classname)
-        students = classlist.readlines()
+        space_students = classlist.readlines()
+        students = []
+        for i in space_students:
+            students.append(i.strip())
+
 
         # print out list of students
         i = 0
@@ -77,15 +81,16 @@ class StudentList(tk.Frame):
 
 
         #t.frame = tk.Frame(t, relief=RAISED, borderwidth=1).grid(sticky = N+W, row = 0, column = 0, columnspan = 4, rowspan = 4)
-        t.names_draw = tk.Label(t, text = "John Joe Mary", width = 20).grid(sticky = N+W, row = 0, column = 0, columnspan = 8, rowspan = 4)
+        t.names_draw = tk.Label(t, text = "John Joe Mary", width = 25).grid(sticky = N+W, row = 0, column = 0, columnspan = 10, rowspan = 4)
 
         #Names = tk.Label(t, text = "ME ME ME!", justify = CENTER).grid(sticky = N+E+S+W)
         #frame.pack(fill=BOTH, side = BOTTOM, expand=True)
 
 
         #l = tk.Label(t, text="IT WORKS!").grid(row = 0, column = 0)
-        t.labelHeaderStudentList = tk.Label(t, text="#   Name", width = 20).grid(row=0,column=8, columnspan = 4)
-        t.sep = Separator(t, orient="horizontal").grid(row = 1, column = 8, columnspan = 8, sticky = E+W)
+        t.labelHeaderStudentList = tk.Label(t, text="#   Name", width = 20).grid(row=0,column=9, columnspan = 4, sticky=W)
+        t.sep = Separator(t, orient="horizontal").grid(row = 1, column = 9, columnspan = 8, sticky = E+W)
+        t.sep2 = Separator(t, orient="vertical").grid(row = 0, column = 9, rowspan = 8, sticky = N+S)
         sty = Style(t)
         sty.configure("TSeperator", fg = "black")
         r = 1
@@ -95,25 +100,30 @@ class StudentList(tk.Frame):
         # FIXME: want every time press draw names to add one more line to the names list
         # FIXME: eventually want names being drawn to be shown where Joe John Mary is
 
-        drawnames()
+        #drawnames()
 
 
-        drawnamesButton = tk.Button(t, text = "Draw Names", command = drawnames).grid(row = r+1, column = 0)
+        # def drawnames():
+        try:
+            num = r
+            for i in range(int(len(students)/groupnums)-1, -1, -1):
 
+                # FIXME: have align left for all 
+                t.labelStudentList = tk.Label(t, text=str(num) + ".   " + students[r-1] + " & " + students[r], width = 20).grid(row=r+1,column=10, columnspan = 4, sticky=W)
+                # t.labelStudentList2 = tk.Label(t, text=" & ").grid(row=r,column=10)
+                # t.labelStudentList3 = tk.Label(t, text=students[r]).grid(row=r,column=11)
 
+                num = num + 1
+                numstudents = numstudents - 1
+                r = r + 2
+                if students[i] == 0:
+                    students.pop(i)
+        except IndexError:
+            print()
 
-        def drawnames():
-            try:
-                for i in range(int(len(students)/groupnums)-1, -1, -1):
-                    num = r
-                    t.labelStudentList = tk.Label(t, text=str(num) + ".   " + students[r-1] + " & " + students[r], width = 20).grid(row=r,column=8, columnspan = 4)
-                    numstudents = numstudents - 1
+        t.sep3 = Separator(t, orient="horizontal").grid(row = r+2, column = 0, columnspan = 20, sticky = E+W)
 
-                    if students[i] == 0:
-                        students.pop(i)
-            except IndexError:
-                print()
-            print("Hello")
+        drawnamesButton = tk.Button(t, text = "Draw Names").grid(row = r+3, column = 0, padx = 10, pady = 10, ipadx = 5, ipady = 5)
 
 
 
