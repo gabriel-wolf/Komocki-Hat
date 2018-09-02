@@ -12,7 +12,7 @@ class StudentList(tk.Frame):
         super().__init__(master)
 
         print("INIT")
-        global classname, studentnames, students, filename, groupnums, numstudents, content, classNameVar, defaultClassName, classlists, allClassesList
+        global classname, studentnames, students, filename, groupnums, numstudents, content, classNameVar, defaultClassName, classlists, allClassesList, entryb1
         self.happened = 1
         readDefaultClass = open("defaultClass.txt", mode='r+')
         space_filename = readDefaultClass.readlines()
@@ -191,7 +191,22 @@ class StudentList(tk.Frame):
         grabBtn.bind('<Button-1>', grabText)
 
 
+
+
+
     def start_draw(self):
+        def getgrounumsfunc(en):
+            global groupnums
+            content = groupnumsentry.get()
+            print(content)
+            groupnums = int(content)
+            for widget in t.winfo_children():
+                widget.destroy()
+
+        global groupnums, entryb1
+        print("groupnums: " + str(groupnums))
+
+        entryb1 = StringVar
         if self.happened == 1 :
             print("starting initial draw")
             global t
@@ -205,14 +220,16 @@ class StudentList(tk.Frame):
             print()
 
 
-        names_draw = tk.Label(t, text = "John Joe Mary", width = 25).grid(sticky = N+W, row = 0, column = 0, columnspan = 10, rowspan = 4)
+        names_draw = tk.Label(t, text = "John Joe Mary").grid(sticky = N+W, row = 0, column = 0, columnspan = 4, rowspan = 4)
 
-        labelHeaderStudentList = tk.Label(t, text="#   Name", width = 20).grid(row=0,column=9, columnspan = 4, sticky=W)
-        sep = Separator(t, orient="horizontal").grid(row = 1, column = 9, columnspan = 8, sticky = E+W)
-        sep2 = Separator(t, orient="vertical").grid(row = 0, column = 9, rowspan = 8, sticky = N+S)
+        labelHeaderStudentList = tk.Label(t, text="#   Name").grid(row=0,column=5, columnspan = 4, sticky=W)
+        sep = Separator(t, orient="horizontal").grid(row = 1, column = 4, columnspan = 8, sticky = E+W)
+        sep2 = Separator(t, orient="vertical").grid(row = 0, column = 4, rowspan = 40, sticky = N+S)
         sty = Style(t)
         sty.configure("TSeperator", fg = "black")
+
         r = 3
+
         grouplabelsrepeat = groupnums - 1
         numstudents = len(students)
         random.shuffle(students)
@@ -248,7 +265,7 @@ class StudentList(tk.Frame):
                         print("options: " + options[0])
                         print(new_label_value)
                         print(studentlabelstringvar1)
-                        tk.Label(t, text=new_label_value, width = 30).grid(row=r+1,column=10, columnspan = 4, sticky=W)
+                        tk.Label(t, text=new_label_value).grid(row=r+1,column=5, columnspan = 4, sticky=W)
 
                 except IndexError:
                     print('', end = '', flush = True)
@@ -261,7 +278,14 @@ class StudentList(tk.Frame):
 
         sep3 = Separator(t, orient="horizontal").grid(row = r+2, column = 0, columnspan = 20, sticky = E+W)
 
-        drawnamesButton = tk.Button(t, text = "Draw Groups", command = self.start_draw).grid(row = r+3, column = 0, padx = 10, pady = 10, ipadx = 5, ipady = 5)
+        groupnumslabel = Label(t, text = "Students per group: ").grid(row = r+ 3, column = 9)
+
+        groupnumsentry = Entry(t, text = groupnums, width = 2)
+        print(entryb1.get)
+        groupnumsentry.grid(row = r+3, column = 10)
+        #groupnumsentry.bind('<Return>', getgrounumsfunc)
+
+        drawnamesButton = tk.Button(t, text = "Draw Groups", command=lambda:[getgrounumsfunc(0),self.start_draw()]).grid(row = r+3, column = 0, padx = 10, pady = 10, ipadx = 5, ipady = 5)
 
 
 
