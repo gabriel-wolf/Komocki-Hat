@@ -1,8 +1,14 @@
 import tkinter as tk
 import random
 from tkinter import messagebox
+from PIL import Image, ImageTk
+from itertools import count, cycle
+from tkinter import PhotoImage
 from random import shuffle
 from tkinter import *
+import AnimatedGif
+from AnimatedGif import AnimatedGif
+import base64
 import io
 from tkinter.ttk import Separator, Style
 
@@ -206,6 +212,11 @@ class StudentList(tk.Frame):
         global groupnums, entryb1
         print("groupnums: " + str(groupnums))
 
+        # try:
+        #
+        # except TypeError:
+        #     print("TypeError")
+
         entryb1 = StringVar
         if self.happened == 1 :
             print("starting initial draw")
@@ -218,9 +229,14 @@ class StudentList(tk.Frame):
             self.happened = 0
         else:
             print()
+            try:
+                lbl_with_my_gif.stop()  # Setting stop flag, which ends the update loop (animation)
+            except UnboundLocalError:
+                print("UnboundLocalError")
 
 
-        names_draw = tk.Label(t, text = "John Joe Mary").grid(sticky = N+W, row = 0, column = 0, columnspan = 4, rowspan = 4)
+
+
 
         labelHeaderStudentList = tk.Label(t, text="#   Name").grid(row=0,column=5, columnspan = 4, sticky=W)
         sep = Separator(t, orient="horizontal").grid(row = 1, column = 4, columnspan = 8, sticky = E+W)
@@ -275,14 +291,18 @@ class StudentList(tk.Frame):
             groupsub3 = groupsub3 - 1
             groupsub2 = groupnums - 1
 
+        lbl_with_my_gif = AnimatedGif(t, 'danceStick.gif', 0.05)  # (tkinter.parent, filename, delay between frames)
+        lbl_with_my_gif.grid(row=0,column=0,rowspan = r+1)  # Packing the label with the animated gif (grid works just as well)
+        lbl_with_my_gif.start_thread()  # Shows gif at first frame and we are ready to go
 
-        sep3 = Separator(t, orient="horizontal").grid(row = r+2, column = 0, columnspan = 20, sticky = E+W)
 
-        groupnumslabel = Label(t, text = "Students per group: ").grid(row = r+ 3, column = 9)
+        sep3 = Separator(t, orient="horizontal").grid(row = r + 2, column = 0, columnspan = 20, sticky = E+W)
 
-        groupnumsentry = Entry(t, text = groupnums, width = 2)
+        Label(t, text = "Students per group: ").grid(row = r + 3, column = 8, sticky = E)
+
+        groupnumsentry = Entry(t, text = groupnums, width = 5)
         print(entryb1.get)
-        groupnumsentry.grid(row = r+3, column = 10)
+        groupnumsentry.grid(row = r+3, column = 9, sticky = W, padx = 10)
         #groupnumsentry.bind('<Return>', getgrounumsfunc)
 
         drawnamesButton = tk.Button(t, text = "Draw Groups", command=lambda:[getgrounumsfunc(0),self.start_draw()]).grid(row = r+3, column = 0, padx = 10, pady = 10, ipadx = 5, ipady = 5)
@@ -292,10 +312,11 @@ class StudentList(tk.Frame):
 
 if __name__ == '__main__':
     root = tk.Tk()
+
     root.title("Komocki Hat")
     root.resizable(True,True)
     studentList = StudentList(root)
-
+    #studentList.load('danceStick.gif')
     studentList.grid()
     studentList.config()
     root.mainloop()
