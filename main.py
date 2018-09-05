@@ -6,7 +6,6 @@ from itertools import count, cycle
 from tkinter import PhotoImage
 from random import shuffle
 from tkinter import *
-import AnimatedGif
 from AnimatedGif import AnimatedGif
 import base64
 import io
@@ -16,10 +15,14 @@ from tkinter.ttk import Separator, Style
 class StudentList(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
+        global classname, studentnames, students, filename, groupnums, content, classNameVar, classlists, allClassesList, entryb1
+        # settings
+        global gif_on
+        global defaultClassName
+        gif_on = True
 
-        print("INIT")
-        global classname, studentnames, students, filename, groupnums, numstudents, content, classNameVar, defaultClassName, classlists, allClassesList, entryb1
         self.happened = 1
+        groupnums = 2
         readDefaultClass = open("defaultClass.txt", mode='r+')
         space_filename = readDefaultClass.readlines()
         list_filename = []
@@ -27,20 +30,18 @@ class StudentList(tk.Frame):
             list_filename.append(k.strip())
         classname = str(list_filename[0])
         filename = classname + ".txt"
-
         ReadAllClasses = open("allclasses.txt", mode='r+')
         spaceAllClasses = ReadAllClasses.readlines()
         allClassesList = []
         for q in spaceAllClasses:
             allClassesList.append(q.strip())
-
-        groupnums = 2
         classlist = open(filename, mode='r+')
-        print(classname)
+
         space_students = classlist.readlines()
         students = []
         for i in space_students:
             students.append(i.strip())
+
 
         # print out list of students
         i = 0
@@ -53,12 +54,13 @@ class StudentList(tk.Frame):
         except IndexError:
             print()
 
+        # variables
         self.variable = tk.StringVar()
         self.variable.set(classname)
-
         classNameVar = StringVar()
         classNameVar.set(classname)
 
+        # start main widgets creation
         self.create_widgets()
 
 
@@ -68,8 +70,6 @@ class StudentList(tk.Frame):
         print(students[0])
         for widget in self.winfo_children():
             widget.destroy()
-
-
 
         print(students[0])
 
@@ -81,7 +81,7 @@ class StudentList(tk.Frame):
 
         self.buttonDraw = tk.Button(self, text = "Draw", command = self.start_draw).grid(row = 2, column = 0, columnspan = 2, sticky = E+W)
         self.labelHeaderStudentList = tk.Label(self, text="#   Name").grid(row=3,column=0, columnspan = 2, sticky = W)
-        sep = Separator(self, orient="horizontal").grid(row = 4, column = 0, columnspan = 2, sticky = E+W)
+        Separator(self, orient="horizontal").grid(row = 4, column = 0, columnspan = 2, sticky = E+W)
         sty = Style(self)
         sty.configure("TSeperator", fg = "black")
 
@@ -162,9 +162,7 @@ class StudentList(tk.Frame):
             except IndexError:
                 print()
 
-
             i = 0
-
             try:
                 while i >= 0:
                     num = int(i) + 1
@@ -184,9 +182,8 @@ class StudentList(tk.Frame):
         add_class.resizable(True,True)
         add_class.grid()
         add_class.config()
-        #t.geometry('500x500')
         add_class.wm_title("Draw")
-        label = tk.Label(add_class, text = "Class Name", justify = CENTER).grid(row = 0, column = 0, columnspan = 5, sticky = E+W)
+        tk.Label(add_class, text = "Class Name", justify = CENTER).grid(row = 0, column = 0, columnspan = 5, sticky = E+W)
         ClassEntryBox = Entry(add_class)
         ClassEntryBox.grid(row = 1, column = 0, columnspan = 5)
         StudentsEntryBox = Text(add_class, width = 20, height = 10)
@@ -229,20 +226,14 @@ class StudentList(tk.Frame):
 
 
 
-        labelHeaderStudentList = tk.Label(t, text="#   Name").grid(row=0,column=5, columnspan = 4, sticky=W)
-        sep = Separator(t, orient="horizontal").grid(row = 1, column = 4, columnspan = 8, sticky = E+W)
-        sep2 = Separator(t, orient="vertical").grid(row = 0, column = 4, rowspan = 40, sticky = N+S)
+        tk.Label(t, text="#   Name").grid(row=0,column=5, columnspan = 4, sticky=W)
+        Separator(t, orient="horizontal").grid(row = 1, column = 4, columnspan = 8, sticky = E+W)
+        Separator(t, orient="vertical").grid(row = 0, column = 4, rowspan = 40, sticky = N+S)
         sty = Style(t)
         sty.configure("TSeperator", fg = "black")
-
         r = 3
-
-        grouplabelsrepeat = groupnums - 1
-        numstudents = len(students)
         random.shuffle(students)
-
         studentlabelstringvar1 = StringVar()
-        groupsub = groupnums - 1
         groupsub2 = groupnums - 1
         def chunks(l, n):
             for i in range(0, len(l), n):
@@ -250,7 +241,7 @@ class StudentList(tk.Frame):
         print(list(chunks(students, groupnums)))
         numgrounps = len(list(chunks(students, groupnums)))
         groupsub3 = numgrounps - 1
-        labelendlist = range(0,numgrounps+1)
+        range(0,numgrounps+1)
 
         num = 1
         options = []
@@ -282,17 +273,19 @@ class StudentList(tk.Frame):
             groupsub3 = groupsub3 - 1
             groupsub2 = groupnums - 1
 
-        lbl_with_my_gif = AnimatedGif(t, 'danceStick.gif', 0.05)
-        lbl_with_my_gif.grid(row=0,column=0,rowspan = r+1)
-        lbl_with_my_gif.start_thread()
 
+        if gif_on == True:
+            lbl_with_my_gif = AnimatedGif(t, 'danceStick.gif', 0.05)
+            lbl_with_my_gif.grid(row=0,column=0,rowspan = r+1)
+            lbl_with_my_gif.start_thread()
+        else:
+            print("Gif is not activated.")
 
-        sep3 = Separator(t, orient="horizontal").grid(row = r + 2, column = 0, columnspan = 20, sticky = E+W)
+        Separator(t, orient="horizontal").grid(row = r + 2, column = 0, columnspan = 20, sticky = E+W)
         Label(t, text = "Students per group: ").grid(row = r + 3, column = 8, sticky = E)
         groupnumsentry = Entry(t, text = groupnums, width = 5)
-        print(entryb1.get)
         groupnumsentry.grid(row = r+3, column = 9, sticky = W, padx = 10)
-        drawnamesButton = tk.Button(t, text = "Draw Groups", command=lambda:[getgrounumsfunc(0),self.start_draw()]).grid(row = r+3, column = 0, padx = 10, pady = 10, ipadx = 5, ipady = 5)
+        tk.Button(t, text = "Draw Groups", command=lambda:[getgrounumsfunc(0),self.start_draw()]).grid(row = r+3, column = 0, padx = 10, pady = 10, ipadx = 5, ipady = 5)
 
 
 
@@ -303,7 +296,6 @@ if __name__ == '__main__':
     root.title("Komocki Hat")
     root.resizable(True,True)
     studentList = StudentList(root)
-    #studentList.load('danceStick.gif')
     studentList.grid()
     studentList.config()
     root.mainloop()
