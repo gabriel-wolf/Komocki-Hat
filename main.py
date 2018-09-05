@@ -146,7 +146,6 @@ class StudentList(tk.Frame):
                         classesFile.write(classname)
 
             classlist = open(full_file_name, mode='w+')
-            #classname = filename[:len(filename) - 4]
             classlist.write(input)
             classlist = open(full_file_name, mode="r+")
             space_students = classlist.readlines()
@@ -198,8 +197,6 @@ class StudentList(tk.Frame):
 
 
 
-
-
     def start_draw(self):
         def getgrounumsfunc(en):
             global groupnums
@@ -212,10 +209,6 @@ class StudentList(tk.Frame):
         global groupnums, entryb1
         print("groupnums: " + str(groupnums))
 
-        # try:
-        #
-        # except TypeError:
-        #     print("TypeError")
 
         entryb1 = StringVar
         if self.happened == 1 :
@@ -230,11 +223,9 @@ class StudentList(tk.Frame):
         else:
             print()
             try:
-                lbl_with_my_gif.stop()  # Setting stop flag, which ends the update loop (animation)
+                lbl_with_my_gif.stop()
             except UnboundLocalError:
                 print("UnboundLocalError")
-
-
 
 
 
@@ -291,20 +282,16 @@ class StudentList(tk.Frame):
             groupsub3 = groupsub3 - 1
             groupsub2 = groupnums - 1
 
-        lbl_with_my_gif = AnimatedGif(t, 'danceStick.gif', 0.05)  # (tkinter.parent, filename, delay between frames)
-        lbl_with_my_gif.grid(row=0,column=0,rowspan = r+1)  # Packing the label with the animated gif (grid works just as well)
-        lbl_with_my_gif.start_thread()  # Shows gif at first frame and we are ready to go
+        lbl_with_my_gif = AnimatedGif(t, 'danceStick.gif', 0.05)
+        lbl_with_my_gif.grid(row=0,column=0,rowspan = r+1)
+        lbl_with_my_gif.start_thread()
 
 
         sep3 = Separator(t, orient="horizontal").grid(row = r + 2, column = 0, columnspan = 20, sticky = E+W)
-
         Label(t, text = "Students per group: ").grid(row = r + 3, column = 8, sticky = E)
-
         groupnumsentry = Entry(t, text = groupnums, width = 5)
         print(entryb1.get)
         groupnumsentry.grid(row = r+3, column = 9, sticky = W, padx = 10)
-        #groupnumsentry.bind('<Return>', getgrounumsfunc)
-
         drawnamesButton = tk.Button(t, text = "Draw Groups", command=lambda:[getgrounumsfunc(0),self.start_draw()]).grid(row = r+3, column = 0, padx = 10, pady = 10, ipadx = 5, ipady = 5)
 
 
